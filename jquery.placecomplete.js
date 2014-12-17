@@ -166,7 +166,7 @@ Plugin.prototype.init = function() {
                     var results = $.map(aprs, function(apr) {
                         var skipResult = false;
                         if (filterResults) {
-                            skipResult = filterResults.call(null, apr);
+                            skipResult = filterResults.call(null, apr, query);
                         }
                         if (skipResult) {
                             return null;
