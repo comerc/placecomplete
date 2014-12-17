@@ -3,10 +3,7 @@
 ;(function(factory) {
     if (typeof define === "function" && define.amd) {
         // AMD. Register as an anonymous module
-        define(["jquery", "select2"], factory);
-    } else if (typeof require === "function") {
-        require("jquery");
-        require("select2");
+        define(["jquery"], factory);
     } else {
         // browser globals
         factory(jQuery);
