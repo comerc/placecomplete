@@ -170,7 +170,7 @@ Plugin.prototype.init = function() {
                         // Select2 needs a "text" and "id" property set
                         // for each autocomplete list item. "id" is
                         // already defined on the apr object
-                        apr["text"] = apr["description"];
+                        apr["id"] = apr["text"] = apr["description"];
                         return apr;
                     });
                     query.callback({results: results});
@@ -187,7 +187,7 @@ Plugin.prototype.init = function() {
 
             // The id doesn't matter here since we're just trying to prefill
             // the input with text for the user to see.
-            callback({id: 0, text: initText});
+            callback({id: initText, text: initText});
         },
         minimumInputLength: 1,
         selectOnBlur: true,
