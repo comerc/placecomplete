@@ -128,7 +128,7 @@ var GooglePlacesAPI = {
             var deferred = new $.Deferred();
             var displayText = abbreviatedPlaceResult.description;
             this.pService.getDetails({
-                reference: abbreviatedPlaceResult.reference
+                placeId: abbreviatedPlaceResult.place_id
             }, $.proxy(this._handleDetails, null, deferred, displayText));
             return deferred.promise();
         }, this));
