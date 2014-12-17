@@ -112,6 +112,10 @@ var GooglePlacesAPI = {
     getPredictions: function(searchTerm, requestParams) {
         return this.deferred.then($.proxy(function() {
             var deferred = new $.Deferred();
+            if (typeof requestParams === "function")
+            {
+              requestParams = requestParams();
+            }
             requestParams = $.extend({}, requestParams, {
                 "input": searchTerm
             });
