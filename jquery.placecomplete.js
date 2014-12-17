@@ -153,12 +153,20 @@ Plugin.prototype.init = function() {
     var $el = $(this.element);
 
     var requestParams = this.options.requestParams;
+    var filterResults = this.options.filterResults;
 
     var select2options = $.extend({}, {
         query: function(query) {
             GooglePlacesAPI.getPredictions(query.term, requestParams)
                 .done(function(aprs) {
                     var results = $.map(aprs, function(apr) {
+                        var skipResult = false;
+                        if (filterResults) {
+                            skipResult = filterResults.call(null, apr);
+                        }
+                        if (skipResult) {
+                            return null;
+                        }
                         // Select2 needs a "text" and "id" property set
                         // for each autocomplete list item. "id" is
                         // already defined on the apr object
