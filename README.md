@@ -108,6 +108,10 @@ $("#example").placecomplete({
 });
 ```
 
+### filterResults, selectDetails, requestParams
+
+You can use the assignment of this functions (please see code of `example.html`)
+
 ### Other options
 
 #### Default input value
@@ -122,7 +126,7 @@ You can supply a default input value to bootstrap the "selected item" text when 
 
 Placecomplete triggers three events:
 
-### `placecomplete:selected`
+### `placecomplete:selected` (deprecated, use the assignment of function `selectDetails`)
 When the user selects an item from the autocomplete.
 
 The `placeResult` object takes the format of the [Google Maps API PlaceResult object](https://developers.google.com/maps/documentation/javascript/reference#PlaceResult) with one small exception.
@@ -137,7 +141,7 @@ $("#example").on({
 });
 ```
 
-### `placecomplete:cleared`
+### `placecomplete:cleared` (deprecated, use `select2-removed`)
 When the user clears the input via the clear button
 
 ```javascript
