@@ -158,6 +158,7 @@ Plugin.prototype.init = function() {
 
     var requestParams = this.options.requestParams;
     var filterResults = this.options.filterResults;
+    var selectDetails = this.options.selectDetails;
 
     var select2options = $.extend({}, {
         query: function(query) {
@@ -195,7 +196,6 @@ Plugin.prototype.init = function() {
         },
         minimumInputLength: 1,
         selectOnBlur: true,
-        allowClear: true,
         multiple: false,
         dropdownCssClass: "jquery-placecomplete-google-attribution",
         placeholder: this.options.placeholderText
@@ -204,21 +204,26 @@ Plugin.prototype.init = function() {
     $el.select2(select2options);
 
     $el.on({
-        "select2-removed": function(evt) {
-            $el.trigger(pluginName + ":cleared");
-        },
-        "change": function(evt) {
-            if (!evt.added) {
-                return;
+      "select2-selecting": function(evt) {
+        $el.select2("close");
+        evt.preventDefault();
+        evt.stopPropagation();
+        GooglePlacesAPI.getDetails(evt.choice)
+          .done(function(placeResult) {
+            var val = null;
+            if (selectDetails)
+            {
+              val = selectDetails.call(null, placeResult);
             }
-            GooglePlacesAPI.getDetails(evt.added)
-                .done(function(placeResult) {
-                    $el.trigger(pluginName + ":selected", placeResult);
-                })
-                .fail(function(errorMsg) {
-                    $el.trigger(pluginName + ":error", errorMsg);
-                });
-        }
+            if (!val) {
+              val = placeResult.display_text;
+            }
+            $el.select2("val", val, true); // true for change-event
+          })
+          .fail(function(errorMsg) {
+            $el.trigger(pluginName + ":error", errorMsg);
+          });
+      }
     });
 };
 

@@ -9,8 +9,8 @@
 
         <!-- jQuery, Select2 -->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/3.4.1/select2.min.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.4.1/select2.min.css">
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.5.2/select2.min.css">
 
         <!-- Placecomplete plugin -->
         <script src="jquery.placecomplete.js"></script>
@@ -100,28 +100,32 @@
                     $responseEl = $("#response");
 
                 $el.placecomplete({
-                    width: "element"
+                    width: "element",
+                    allowClear: true,
+                    filterResults: function(abbreviatedPlaceResult, query) {
+                      return abbreviatedPlaceResult.description.toUpperCase().indexOf(query.term.toUpperCase()) === -1;
+                    },
+                    selectDetails: function(placeResult) {
+                      var data = JSON.stringify(placeResult, undefined, 2);
+
+                      var context = {
+                          eventType: "call of selectDetails",
+                          dataTypeHTML: "<a href='https://developers.google.com/maps/documentation/javascript/reference#PlaceResult'>Google Maps API PlaceResult</a> augmented with display_text property",
+                          data: data
+                      };
+                      $responseEl.html(tmpl(context));
+
+                      // Add syntax highlighting via highlight.js
+                      $responseEl.find("pre code").each(function(i, el) {
+                          hljs.highlightBlock(el);
+                      });
+                    }
                 });
 
                 var tmpl = Handlebars.compile($("#response-template").html());
 
                 $el.on({
-                    "placecomplete:selected": function(evt, placeResult) {
-                        var data = JSON.stringify(placeResult, undefined, 2);
-
-                        var context = {
-                            eventType: evt.type,
-                            dataTypeHTML: "<a href='https://developers.google.com/maps/documentation/javascript/reference#PlaceResult'>Google Maps API PlaceResult</a> augmented with display_text property",
-                            data: data
-                        };
-                        $responseEl.html(tmpl(context));
-
-                        // Add syntax highlighting via highlight.js
-                        $responseEl.find("pre code").each(function(i, el) {
-                            hljs.highlightBlock(el);
-                        });
-                    },
-                    "placecomplete:cleared": function(evt) {
+                    "select2-removed": function(evt) {
                         var context = {
                             eventType: evt.type
                         };

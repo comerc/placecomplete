@@ -9,7 +9,7 @@
     "url": "git@github.com:stchangg/placecomplete.git"
   },
   "dependencies": {
-    "select2": "~3.4.5"
+    "select2": "~3.5.2"
   },
   "bugs": {
     "url": "https://github.com/stchangg/placecomplete/issues"
