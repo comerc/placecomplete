@@ -126,7 +126,8 @@ You can supply a default input value to bootstrap the "selected item" text when 
 
 Placecomplete triggers three events:
 
-### `placecomplete:selected` (deprecated, use the assignment of function `selectDetails`)
+### `placecomplete:selected` 
+### (deprecated, you can use the assignment of function `selectDetails`)
 When the user selects an item from the autocomplete.
 
 The `placeResult` object takes the format of the [Google Maps API PlaceResult object](https://developers.google.com/maps/documentation/javascript/reference#PlaceResult) with one small exception.
@@ -141,7 +142,8 @@ $("#example").on({
 });
 ```
 
-### `placecomplete:cleared` (deprecated, use `select2-removed`)
+### `placecomplete:cleared` 
+### (deprecated, you can use `select2-removed`)
 When the user clears the input via the clear button
 
 ```javascript
