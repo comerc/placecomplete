@@ -102,6 +102,15 @@
                 $el.placecomplete({
                     width: "element",
                     allowClear: true,
+                    // to set requestParams dinamically
+                    requestParams: function() {
+                      return {
+                        types: ["(cities)"],
+                        componentRestrictions: {
+                          "country": "us"
+                        }
+                      };
+                    },
                     filterResults: function(abbreviatedPlaceResult, query) {
                       return abbreviatedPlaceResult.description.toUpperCase().indexOf(query.term.toUpperCase()) === -1;
                     },
