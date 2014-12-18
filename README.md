@@ -5,6 +5,10 @@ A Select2/jQuery plugin for location autocomplete powered by the Google Maps API
 
 [Try the demo here.](https://rawgithub.com/comerc/placecomplete/master/example.html)
 
+## Related 
+
+[Placecomplete](https://github.com/comerc/meteor-autoform-placecomplete) wrapper for [Meteor](https://github.com/meteor/meteor)-[AutoForm](https://github.com/aldeed/meteor-autoform)
+
 ## Summary
 
 At Khan Academy we needed a way to let users:
