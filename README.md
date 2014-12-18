@@ -3,7 +3,7 @@ Placecomplete
 
 A Select2/jQuery plugin for location autocomplete powered by the Google Maps API
 
-[Try the demo here.](https://rawgithub.com/stchangg/placecomplete/master/example.html)
+[Try the demo here.](https://rawgithub.com/comerc/placecomplete/master/example.html)
 
 ## Summary
 
