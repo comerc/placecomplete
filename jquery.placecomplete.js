@@ -165,8 +165,9 @@ Plugin.prototype.init = function() {
             GooglePlacesAPI.getPredictions(query.term, requestParams)
                 .done(function(aprs) {
                     var results = $.map(aprs, function(apr) {
-                        var skipResult = false;
-                        if (filterResults) {
+                        // BUGFIX: values that do not contain query.term: SAN > "Rissia, Saint Petersburg"
+                        var skipResult = apr.description.toUpperCase().indexOf(query.term.toUpperCase()) === -1;
+                        if (!skipResult && filterResults) {
                             skipResult = filterResults.call(null, apr, query);
                         }
                         if (skipResult) {
@@ -194,6 +195,21 @@ Plugin.prototype.init = function() {
             // the input with text for the user to see.
             callback({id: initText, text: initText});
         },
+        formatResult: function(result, container, query) {
+          // BUGFIX: "Россия, город Санкт-Петербург, Санкт-Петербург" >>> "Россия, Санкт-Петербург"
+          var re, m;
+          re = /(.*), (city|Stadt|ville|ciudad|città|cidade|город|城市|kota|grad|ciutat|město|by|mji|pilsēta|miestas|város|bandar|നഗരം|stad|miasto|oraș|qytet|mesto|град|kaupunki|lungsod|thành phố|şehir|πόλη|місто|עיר|शहर|เมือง|街|도시) (.*), (.*)/;
+          m = re.exec(result.text);
+          if (m && (m[1] === m[3] || m[3] === m[4])) {
+            result.text = m[1] + ", " + m[4];
+          }
+          re = new RegExp("(.*?)(" + query.term + ")(.*)", "i");
+          m = re.exec(result.text);
+          if (m) {
+            result.text = m[1] + "<u>" + m[2] + "</u>" + m[3];
+          }
+          return result.text;
+        },
         minimumInputLength: 1,
         selectOnBlur: true,
         multiple: false,
@@ -216,7 +232,42 @@ Plugin.prototype.init = function() {
               val = selectDetails.call(null, placeResult);
             }
             if (!val) {
-              val = placeResult.display_text;
+              var i, c, t;
+              var withoutTypes = [
+                "postal_code",
+                "administrative_area_level_2",
+                "administrative_area_level_3",
+                "administrative_area_level_4"
+              ];
+              var country = "";
+              var aLevel2 = "";
+              i = 0;
+              while (i < placeResult.address_components.length) {
+                c = placeResult.address_components[i];
+                t = c.types[0];
+                if (t === "country") {
+                  country = c.short_name;
+                }
+                if (t === "administrative_area_level_2") {
+                  aLevel2 = c.long_name;
+                }
+                i++;
+              }
+              val = placeResult.address_components[0].long_name;
+              i = 1;
+              while (i < placeResult.address_components.length) {
+                c = placeResult.address_components[i];
+                t = c.types[0];
+                if (withoutTypes.indexOf(t) === -1) {
+                  // BUGFIX: double values of "mono-city": St Petersburg, St Petersburg, Russia
+                  // BUGFIX: administrative_area_level_1 restricted for "Смоленск, Смоленская область", but not for "Самара, Самарская область"
+                  if (!country || country === "US" || t !== "administrative_area_level_1" || c.long_name !== aLevel2) {
+                    // BUGFIX: short_name for US states
+                    val += ", " + (country === "US" && t === "administrative_area_level_1" ? c.short_name : c.long_name);
+                  }
+                }
+                i++;
+              }
             }
             $el.select2("val", val, true); // true for change-event
           })

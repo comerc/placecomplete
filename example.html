@@ -111,9 +111,6 @@
                         }
                       };
                     },
-                    filterResults: function(abbreviatedPlaceResult, query) {
-                      return abbreviatedPlaceResult.description.toUpperCase().indexOf(query.term.toUpperCase()) === -1;
-                    },
                     selectDetails: function(placeResult) {
                       var data = JSON.stringify(placeResult, undefined, 2);
 
@@ -128,6 +125,9 @@
                       $responseEl.find("pre code").each(function(i, el) {
                           hljs.highlightBlock(el);
                       });
+
+                      // it is access to format routine
+                      return null;
                     }
                 });
 
