@@ -1,6 +1,6 @@
 {
   "name": "placecomplete",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "description": "A Select2/jQuery plugin for location autocomplete powered by the Google Maps API",
   "author": "Stephanie H. Chang",
   "main": "jquery.placecomplete.js",
