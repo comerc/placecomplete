@@ -196,6 +196,7 @@ Plugin.prototype.init = function() {
             callback({id: initText, text: initText});
         },
         formatResult: function(result, container, query) {
+          // (you may redefine formatResult)
           // BUGFIX: "Россия, город Санкт-Петербург, Санкт-Петербург" >>> "Россия, Санкт-Петербург"
           var re, m;
           re = /(.*), (city|Stadt|ville|ciudad|città|cidade|город|城市|kota|grad|ciutat|město|by|mji|pilsēta|miestas|város|bandar|നഗരം|stad|miasto|oraș|qytet|mesto|град|kaupunki|lungsod|thành phố|şehir|πόλη|місто|עיר|शहर|เมือง|街|도시) (.*), (.*)/;
@@ -232,6 +233,9 @@ Plugin.prototype.init = function() {
               val = selectDetails.call(null, placeResult);
             }
             if (!val) {
+              // custom format of selected value
+              // BUGFIX: placeResult.formatted_address: "01300 Vantaa, Finland" (postal_code)
+              // BUGFIX: placeResult.display_text: "Россия, город Санкт-Петербург, Санкт-Петербург" (double values of "mono-city")
               var i, c, t, s0;
               var withoutTypes = [
                 "postal_code",
@@ -239,31 +243,20 @@ Plugin.prototype.init = function() {
                 "administrative_area_level_3",
                 "administrative_area_level_4"
               ];
-              var country = "";
               var aLevel2 = "";
-              i = 0;
-              while (i < placeResult.address_components.length) {
-                c = placeResult.address_components[i];
-                t = c.types[0];
-                if (t === "country") {
-                  country = c.short_name;
-                }
-                if (t === "administrative_area_level_2") {
-                  aLevel2 = c.long_name;
-                }
-                i++;
-              }
               val = s0 = placeResult.address_components[0].long_name;
               i = 1;
               while (i < placeResult.address_components.length) {
                 c = placeResult.address_components[i];
                 t = c.types[0];
+                if (t === "administrative_area_level_2") {
+                  aLevel2 = c.long_name;
+                }
                 if (withoutTypes.indexOf(t) === -1) {
-                  // BUGFIX: double values of "mono-city": St Petersburg, St Petersburg, Russia
+                  // BUGFIX: double values of "mono-city": "St Petersburg, St Petersburg, Russia"
                   // BUGFIX: administrative_area_level_1 restricted for "Смоленск, Смоленская область", but not for "Самара, Самарская область"
-                  if (!country || country === "US" || t !== "administrative_area_level_1" || c.long_name !== aLevel2 && c.long_name !== s0) {
-                    // BUGFIX: short_name for US states
-                    val += ", " + (country === "US" && t === "administrative_area_level_1" ? c.short_name : c.long_name);
+                  if (t !== "administrative_area_level_1" || c.long_name !== aLevel2 && c.long_name !== s0) {
+                    val += ", " + c.long_name;
                   }
                 }
                 i++;
