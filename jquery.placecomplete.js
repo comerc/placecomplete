@@ -166,9 +166,9 @@ Plugin.prototype.init = function() {
                 .done(function(aprs) {
                     var results = $.map(aprs, function(apr) {
                         // BUGFIX: values that do not contain query.term: SAN > "Rissia, Saint Petersburg"
-                        var skipResult = apr.description.toUpperCase().indexOf(query.term.toUpperCase()) === -1;
+                        var skipResult = !query.matcher(query.term, apr.description);
                         if (!skipResult && filterResults) {
-                            skipResult = filterResults.call(null, apr, query);
+                            skipResult = filterResults.call(null, apr);
                         }
                         if (skipResult) {
                             return null;
@@ -221,11 +221,11 @@ Plugin.prototype.init = function() {
     $el.select2(select2options);
 
     $el.on({
-      "select2-selecting": function(evt) {
+      "select2-selecting": function(event) {
         $el.select2("close");
-        evt.preventDefault();
-        evt.stopPropagation();
-        GooglePlacesAPI.getDetails(evt.choice)
+        event.preventDefault();
+        event.stopPropagation();
+        GooglePlacesAPI.getDetails(event.choice)
           .done(function(placeResult) {
             var val = null;
             if (selectDetails)
