@@ -7,8 +7,8 @@ A Select2/jQuery plugin for location autocomplete powered by the Google Maps API
 
 ## Related 
 
-[Placecomplete](https://github.com/comerc/meteor-autoform-placecomplete) wrapper for [Meteor](https://github.com/meteor/meteor)-[AutoForm](https://github.com/aldeed/meteor-autoform)
-[Selectize Placecomplete Plugin](https://github.com/comerc/selectize-placecomplete)
+* [Placecomplete](https://github.com/comerc/meteor-autoform-placecomplete) wrapper for [Meteor](https://github.com/meteor/meteor)-[AutoForm](https://github.com/aldeed/meteor-autoform)
+* [Selectize Placecomplete Plugin](https://github.com/comerc/selectize-placecomplete)
 
 ## Summary
 
