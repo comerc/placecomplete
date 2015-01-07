@@ -179,7 +179,7 @@ Unfortunately, existing plugins had bugs or UI shortcomings that made them less 
 
 ### [Google Places Autocomplete widget](https://developers.google.com/maps/documentation/javascript/places#places_autocomplete)
 
-The [Google Places Autocomplete widget](https://developers.google.com/maps/documentation/javascript/places#places_autocomplete ([demo here](https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete)) had the following bugs and UI shortcomings:
+The [Google Places Autocomplete widget](https://developers.google.com/maps/documentation/javascript/places#places_autocomplete) ([demo here](https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete)) had the following bugs and UI shortcomings:
 
 1. Pressing enter in or deselecting (either by tabbing or clicking away from) the input field does not cause the first element to be selected.
 
